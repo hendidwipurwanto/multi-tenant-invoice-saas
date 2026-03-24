@@ -18,4 +18,8 @@
     <Folder Include="Features\Tenants\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MultiTenantInvoice.Domain\MultiTenantInvoice.Domain.csproj" />
+  </ItemGroup>
+
 </Project>
