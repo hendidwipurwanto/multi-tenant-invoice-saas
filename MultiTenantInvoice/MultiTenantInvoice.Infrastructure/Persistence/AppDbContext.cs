@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace MultiTenantInvoice.Infrastructure.Persistence
 {
-    public class AppDbContext: DbContext
+    public class AppDbContext: DbContext, IAppDbContext
     {
         private readonly ITenantProvider _tenantProvider;
 
