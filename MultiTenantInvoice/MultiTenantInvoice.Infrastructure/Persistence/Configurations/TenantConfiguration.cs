@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using TenantEntity = MultiTenantInvoice.Domain.Entities.Tenant;
 using MultiTenantInvoice.Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -9,9 +10,9 @@ using System.Threading.Tasks;
 
 namespace MultiTenantInvoice.Infrastructure.Persistence.Configurations
 {
-    public class TenantConfiguration : IEntityTypeConfiguration<Tenant>
+    public class TenantConfiguration : IEntityTypeConfiguration<TenantEntity>
     {
-        public void Configure(EntityTypeBuilder<Tenant> builder)
+        public void Configure(EntityTypeBuilder<TenantEntity> builder)
         {
             builder.HasKey(x => x.Id);
 
