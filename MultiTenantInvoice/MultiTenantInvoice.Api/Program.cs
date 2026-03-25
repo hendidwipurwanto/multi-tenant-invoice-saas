@@ -1,9 +1,15 @@
 using Microsoft.EntityFrameworkCore;
+using MultiTenantInvoice.Api.Middleware;
+using MultiTenantInvoice.Application.Common.Interfaces;
+using MultiTenantInvoice.Application.Common.Tenant;
 using MultiTenantInvoice.Infrastructure.Persistence;
+using MultiTenantInvoice.Infrastructure.Tenant;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddScoped<TenantContext>();
+builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
@@ -16,6 +22,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 var app = builder.Build();
+
+app.UseMiddleware<TenantMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

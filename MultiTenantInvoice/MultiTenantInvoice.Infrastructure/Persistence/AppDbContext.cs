@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using MultiTenantInvoice.Application.Common.Interfaces;
 using MultiTenantInvoice.Domain.Entities;
+using MultiTenantInvoice.Infrastructure.Persistence.Filters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +12,14 @@ namespace MultiTenantInvoice.Infrastructure.Persistence
 {
     public class AppDbContext: DbContext
     {
-        public AppDbContext(DbContextOptions<AppDbContext> options)
-        : base(options)
+        private readonly ITenantProvider _tenantProvider;
+
+        public AppDbContext(DbContextOptions<AppDbContext> options,ITenantProvider tenantProvider) : base(options)
         {
+            _tenantProvider = tenantProvider;
         }
 
-        public DbSet<Tenant> Tenants { get; set; }
+        public DbSet<MultiTenantInvoice.Domain.Entities.Tenant> Tenants { get; set; }
 
         public DbSet<User> Users { get; set; }
 
@@ -30,6 +34,9 @@ namespace MultiTenantInvoice.Infrastructure.Persistence
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+            modelBuilder.ApplyGlobalFilters(_tenantProvider.GetTenantId());
+
         }
     }
 }
