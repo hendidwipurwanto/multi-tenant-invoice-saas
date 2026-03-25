@@ -7,6 +7,7 @@ using MultiTenantInvoice.Infrastructure.Tenant;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddScoped<IAppDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 // Add services to the container.
 builder.Services.AddScoped<TenantContext>();
 builder.Services.AddScoped<ITenantProvider, TenantProvider>();
