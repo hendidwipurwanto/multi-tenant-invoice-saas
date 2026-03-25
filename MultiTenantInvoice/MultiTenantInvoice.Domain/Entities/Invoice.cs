@@ -21,7 +21,7 @@ namespace MultiTenantInvoice.Domain.Entities
         public decimal Tax { get; private set; }
         public decimal Total { get; private set; }
 
-        public InvoiceStatus Status { get; private set; }
+        public InvoiceStatus Status { get; set; }
 
         public ICollection<InvoiceItem> Items { get; set; } = new List<InvoiceItem>();
 
