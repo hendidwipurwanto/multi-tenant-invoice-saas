@@ -10,12 +10,15 @@ namespace MultiTenantInvoice.Domain.Entities
     {
         public string Action { get; set; }
 
+        public string EventType { get; set; }
+
         public string EntityName { get; set; }
 
         public string EntityId { get; set; }
 
         public string? Description { get; set; }
 
+        public string? Metadata { get; set; }
         public string? PerformedBy { get; set; }
     }
 }
