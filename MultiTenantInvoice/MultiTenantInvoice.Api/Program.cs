@@ -14,7 +14,7 @@ builder.Services.AddScoped<IAppDbContext>(provider => provider.GetRequiredServic
 builder.Services.AddScoped<TenantContext>();
 builder.Services.AddScoped<ITenantProvider, TenantProvider>();
 builder.Services.AddScoped<IInvoiceNumberGenerator, InvoiceNumberGenerator>();
-
+builder.Services.AddScoped<IPaymentProcessor, FakePaymentProcessor>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
