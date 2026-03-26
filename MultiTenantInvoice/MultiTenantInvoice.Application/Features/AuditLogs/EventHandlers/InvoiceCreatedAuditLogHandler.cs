@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace MultiTenantInvoice.Application.Features.AuditLogs.EventHandlers
@@ -19,10 +20,13 @@ namespace MultiTenantInvoice.Application.Features.AuditLogs.EventHandlers
             _dbContext = dbContext;
         }
 
-        public async Task Handle(
-            InvoiceCreatedEvent notification,
-            CancellationToken cancellationToken)
+        public async Task Handle(InvoiceCreatedEvent notification,CancellationToken cancellationToken)
         {
+            var metadata = JsonSerializer.Serialize(new
+            {
+                invoiceId = notification.InvoiceId
+            });
+
             var audit = new AuditLog
             {
                 Id = Guid.NewGuid(),
@@ -30,6 +34,7 @@ namespace MultiTenantInvoice.Application.Features.AuditLogs.EventHandlers
                 EntityName = "Invoice",
                 EntityId = notification.InvoiceId.ToString(),
                 Description = $"Invoice {notification.InvoiceId} created",
+                Metadata = metadata,
                 CreatedAt = DateTime.UtcNow
             };
 
