@@ -43,6 +43,8 @@ namespace MultiTenantInvoice.Application.Features.Invoices.Commands.CreateInvoic
                 CreatedAt = DateTime.UtcNow
             };
 
+            invoice.RaiseCreatedEvent();
+
             foreach (var item in request.Items)
             {
                 invoice.Items.Add(new InvoiceItem

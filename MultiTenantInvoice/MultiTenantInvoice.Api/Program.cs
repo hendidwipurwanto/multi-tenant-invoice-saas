@@ -5,6 +5,7 @@ using MultiTenantInvoice.Application.Common.Tenant;
 using MultiTenantInvoice.Infrastructure.Persistence;
 using MultiTenantInvoice.Infrastructure.Services;
 using MultiTenantInvoice.Infrastructure.Tenant;
+using MultiTenantInvoice.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,7 +18,7 @@ builder.Services.AddScoped<IInvoiceNumberGenerator, InvoiceNumberGenerator>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddApplication();
 builder.Services.AddDbContext<AppDbContext>(options =>
 {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
