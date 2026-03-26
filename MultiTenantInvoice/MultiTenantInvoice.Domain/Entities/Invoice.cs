@@ -1,4 +1,5 @@
 ﻿using MultiTenantInvoice.Domain.Enums;
+using MultiTenantInvoice.Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,6 +31,14 @@ namespace MultiTenantInvoice.Domain.Entities
             Subtotal = Items.Sum(x => x.Quantity * x.UnitPrice);
             Tax = Subtotal * 0.11m; // example
             Total = Subtotal + Tax;
+        }
+
+        // ===============================
+        // DOMAIN EVENT
+        // ===============================
+         public void RaiseCreatedEvent()
+        {
+            AddDomainEvent(new InvoiceCreatedEvent(Id));
         }
     }
 }
