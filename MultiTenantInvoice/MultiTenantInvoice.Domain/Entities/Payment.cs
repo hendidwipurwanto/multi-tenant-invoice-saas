@@ -22,11 +22,23 @@ namespace MultiTenantInvoice.Domain.Entities
 
         public DateTime AttemptedAt { get; set; }
 
+        public void MarkAttempted()
+        {
+            AddDomainEvent(new PaymentAttemptedEvent(Id, InvoiceId));
+        }
+
         public void MarkSuccess()
         {
             Status = PaymentStatus.Success;
 
             AddDomainEvent(new PaymentSucceededEvent(Id, InvoiceId));
+        }
+
+        public void MarkFailed()
+        {
+            Status = PaymentStatus.Failed;
+
+            AddDomainEvent(new PaymentFailedEvent(Id, InvoiceId));
         }
     }
 }
