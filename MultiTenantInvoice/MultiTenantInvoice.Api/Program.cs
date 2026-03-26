@@ -3,6 +3,7 @@ using MultiTenantInvoice.Api.Middleware;
 using MultiTenantInvoice.Application.Common.Interfaces;
 using MultiTenantInvoice.Application.Common.Tenant;
 using MultiTenantInvoice.Infrastructure.Persistence;
+using MultiTenantInvoice.Infrastructure.Services;
 using MultiTenantInvoice.Infrastructure.Tenant;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.AddScoped<IAppDbContext>(provider => provider.GetRequiredServic
 // Add services to the container.
 builder.Services.AddScoped<TenantContext>();
 builder.Services.AddScoped<ITenantProvider, TenantProvider>();
+builder.Services.AddScoped<IInvoiceNumberGenerator, InvoiceNumberGenerator>();
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

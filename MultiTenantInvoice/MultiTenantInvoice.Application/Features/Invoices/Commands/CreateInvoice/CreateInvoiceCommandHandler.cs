@@ -14,11 +14,13 @@ namespace MultiTenantInvoice.Application.Features.Invoices.Commands.CreateInvoic
     {
         private readonly IAppDbContext _dbContext;
         private readonly ITenantProvider _tenantProvider;
+        private readonly IInvoiceNumberGenerator _invoiceNumberGenerator;
 
-        public CreateInvoiceCommandHandler(IAppDbContext dbContext, ITenantProvider tenantProvider)
+        public CreateInvoiceCommandHandler(IAppDbContext dbContext, ITenantProvider tenantProvider, IInvoiceNumberGenerator invoiceNumberGenerator)
         {
             _dbContext = dbContext;
             _tenantProvider = tenantProvider;
+            _invoiceNumberGenerator = invoiceNumberGenerator;
         }
 
         public async Task<Guid> Handle(
@@ -27,9 +29,12 @@ namespace MultiTenantInvoice.Application.Features.Invoices.Commands.CreateInvoic
         {
             var request = command.Request;
 
+            var invoiceNumber = await _invoiceNumberGenerator.GenerateAsync(cancellationToken);
+
             var invoice = new Invoice
             {
                 Id = Guid.NewGuid(),
+                InvoiceNumber = invoiceNumber,
                 CustomerId = request.CustomerId,
                 IssueDate = request.IssueDate,
                 DueDate = request.DueDate,
