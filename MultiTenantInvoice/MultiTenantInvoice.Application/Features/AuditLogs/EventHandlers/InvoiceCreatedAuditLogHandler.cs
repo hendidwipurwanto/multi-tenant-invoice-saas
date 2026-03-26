@@ -29,6 +29,7 @@ namespace MultiTenantInvoice.Application.Features.AuditLogs.EventHandlers
                 Action = "CREATE_INVOICE",
                 EntityName = "Invoice",
                 EntityId = notification.InvoiceId.ToString(),
+                Description = $"Invoice {notification.InvoiceId} created",
                 CreatedAt = DateTime.UtcNow
             };
 
