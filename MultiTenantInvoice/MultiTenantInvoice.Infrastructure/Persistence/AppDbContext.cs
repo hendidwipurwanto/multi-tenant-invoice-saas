@@ -34,6 +34,8 @@ namespace MultiTenantInvoice.Infrastructure.Persistence
 
         public DbSet<InvoiceItem> InvoiceItems { get; set; }
 
+        public DbSet<AuditLog> AuditLogs { get; set; }
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             var domainEntities = ChangeTracker

@@ -14,6 +14,8 @@ namespace MultiTenantInvoice.Application.Common.Interfaces
 
         DbSet<InvoiceItem> InvoiceItems { get; }
 
+        public DbSet<AuditLog> AuditLogs { get; set; }
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }
