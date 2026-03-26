@@ -24,6 +24,8 @@ namespace MultiTenantInvoice.Domain.Entities
 
         public InvoiceStatus Status { get; set; }
 
+        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
+
         public ICollection<InvoiceItem> Items { get; set; } = new List<InvoiceItem>();
 
         public void CalculateTotals()
