@@ -1,4 +1,5 @@
 ﻿using MultiTenantInvoice.Domain.Enums;
+using MultiTenantInvoice.Domain.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,5 +21,12 @@ namespace MultiTenantInvoice.Domain.Entities
         public PaymentStatus Status { get; set; }
 
         public DateTime AttemptedAt { get; set; }
+
+        public void MarkSuccess()
+        {
+            Status = PaymentStatus.Success;
+
+            AddDomainEvent(new PaymentSucceededEvent(Id, InvoiceId));
+        }
     }
 }
