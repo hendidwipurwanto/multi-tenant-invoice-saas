@@ -26,8 +26,7 @@ namespace MultiTenantInvoice.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetInvoices(
-    [FromQuery] GetInvoicesQuery query)
+        public async Task<IActionResult> GetInvoices([FromQuery] GetInvoicesQuery query)
         {
             var result = await _mediator.Send(query);
 
