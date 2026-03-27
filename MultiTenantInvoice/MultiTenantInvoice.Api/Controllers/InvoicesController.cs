@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MultiTenantInvoice.Application.Features.Invoices.Queries.GetInvoices;
 using MultiTenantInvoice.Application.Features.Invoices.Queries.GetInvoiceTimeline;
 
 namespace MultiTenantInvoice.Api.Controllers
@@ -20,6 +21,15 @@ namespace MultiTenantInvoice.Api.Controllers
         {
             var result = await _mediator.Send(
                 new GetInvoiceTimelineQuery { InvoiceId = id });
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetInvoices(
+    [FromQuery] GetInvoicesQuery query)
+        {
+            var result = await _mediator.Send(query);
 
             return Ok(result);
         }
