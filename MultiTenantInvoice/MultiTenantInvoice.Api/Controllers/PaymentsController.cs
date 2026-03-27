@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using MultiTenantInvoice.Application.Common.Models;
 using MultiTenantInvoice.Application.Features.Payments.Commands.AttemptPayment;
 using MultiTenantInvoice.Application.Features.Payments.Queries.GetPaymentById;
 
@@ -32,7 +33,11 @@ namespace MultiTenantInvoice.Api.Controllers
             var result = await _mediator.Send(
                 new GetPaymentByIdQuery { PaymentId = id });
 
-            return Ok(result);
+            return Ok(new ApiResponse<PaymentDto>
+            {
+                Success = true,
+                Data = result
+            });
         }
     }
 }
