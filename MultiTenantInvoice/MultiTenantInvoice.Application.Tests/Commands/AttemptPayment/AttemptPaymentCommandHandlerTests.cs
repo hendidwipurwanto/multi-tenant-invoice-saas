@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Moq;
 using MultiTenantInvoice.Application.Common.Interfaces;
 using MultiTenantInvoice.Application.Features.Payments.Commands.AttemptPayment;
+using MultiTenantInvoice.Application.Tests.TestHelpers;
 using MultiTenantInvoice.Domain.Entities;
 using MultiTenantInvoice.Domain.Enums;
 using System;
@@ -25,7 +26,7 @@ namespace MultiTenantInvoice.Application.Tests.Commands.AttemptPayment
         }
 
         [Fact]
-        public async Task Handle_ShouldCreatePaymentAndReturnPaymentId()
+        public async Task Handle_WhenPaymentSucceeds_ShouldReturnPaymentId()
         {
             // Arrange
             var command = new AttemptPaymentCommand
@@ -36,22 +37,18 @@ namespace MultiTenantInvoice.Application.Tests.Commands.AttemptPayment
             };
 
             var payments = new List<Payment>().AsQueryable();
+
             var invoices = new List<Invoice>
         {
-            new Invoice { Id = command.InvoiceId }
+            new Invoice
+            {
+                Id = command.InvoiceId,
+                Status = InvoiceStatus.Sent
+            }
         }.AsQueryable();
 
-            var paymentsDbSet = new Mock<DbSet<Payment>>();
-            paymentsDbSet.As<IQueryable<Payment>>().Setup(m => m.Provider).Returns(payments.Provider);
-            paymentsDbSet.As<IQueryable<Payment>>().Setup(m => m.Expression).Returns(payments.Expression);
-            paymentsDbSet.As<IQueryable<Payment>>().Setup(m => m.ElementType).Returns(payments.ElementType);
-            paymentsDbSet.As<IQueryable<Payment>>().Setup(m => m.GetEnumerator()).Returns(payments.GetEnumerator());
-
-            var invoicesDbSet = new Mock<DbSet<Invoice>>();
-            invoicesDbSet.As<IQueryable<Invoice>>().Setup(m => m.Provider).Returns(invoices.Provider);
-            invoicesDbSet.As<IQueryable<Invoice>>().Setup(m => m.Expression).Returns(invoices.Expression);
-            invoicesDbSet.As<IQueryable<Invoice>>().Setup(m => m.ElementType).Returns(invoices.ElementType);
-            invoicesDbSet.As<IQueryable<Invoice>>().Setup(m => m.GetEnumerator()).Returns(invoices.GetEnumerator());
+            var paymentsDbSet = DbSetMockHelper.CreateMockSet(payments);
+            var invoicesDbSet = DbSetMockHelper.CreateMockSet(invoices);
 
             _dbContextMock.Setup(x => x.Payments).Returns(paymentsDbSet.Object);
             _dbContextMock.Setup(x => x.Invoices).Returns(invoicesDbSet.Object);

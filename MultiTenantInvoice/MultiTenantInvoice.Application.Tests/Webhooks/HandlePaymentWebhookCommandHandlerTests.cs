@@ -2,6 +2,7 @@
 using Moq;
 using MultiTenantInvoice.Application.Common.Interfaces;
 using MultiTenantInvoice.Application.Features.Payments.Webhooks;
+using MultiTenantInvoice.Application.Tests.TestHelpers;
 using MultiTenantInvoice.Domain.Entities;
 using MultiTenantInvoice.Domain.Enums;
 using System;
@@ -22,7 +23,7 @@ namespace MultiTenantInvoice.Application.Tests.Webhooks
         }
 
         [Fact]
-        public async Task Handle_ShouldUpdatePaymentStatusToSuccess()
+        public async Task Handle_WhenPaymentSucceededWebhook_ShouldUpdatePaymentAndInvoice()
         {
             // Arrange
             var paymentId = Guid.NewGuid();
@@ -45,11 +46,20 @@ namespace MultiTenantInvoice.Application.Tests.Webhooks
             var payments = new List<Payment> { payment }.AsQueryable();
             var invoices = new List<Invoice> { invoice }.AsQueryable();
 
+            var paymentsDbSet = DbSetMockHelper.CreateMockSet(payments);
+            var invoicesDbSet = DbSetMockHelper.CreateMockSet(invoices);
+
+            _dbContextMock.Setup(x => x.Payments).Returns(paymentsDbSet.Object);
+            _dbContextMock.Setup(x => x.Invoices).Returns(invoicesDbSet.Object);
+
             _dbContextMock.Setup(x => x.Payments.FindAsync(paymentId))
                 .ReturnsAsync(payment);
 
             _dbContextMock.Setup(x => x.Invoices.FindAsync(invoiceId))
                 .ReturnsAsync(invoice);
+
+            _dbContextMock.Setup(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(1);
 
             var handler = new HandlePaymentWebhookCommandHandler(_dbContextMock.Object);
 
@@ -66,6 +76,10 @@ namespace MultiTenantInvoice.Application.Tests.Webhooks
             // Assert
             payment.Status.Should().Be(PaymentStatus.Success);
             invoice.Status.Should().Be(InvoiceStatus.Paid);
+
+            _dbContextMock.Verify(
+                x => x.SaveChangesAsync(It.IsAny<CancellationToken>()),
+                Times.Once);
         }
     }
 }
