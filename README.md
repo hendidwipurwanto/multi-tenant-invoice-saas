@@ -231,21 +231,6 @@ Timeline Updated
 
 ---
 
-# Testing
-
-Unit tests can be implemented for core business logic such as:
-
-- Invoice total calculation
-- Payment command handlers
-- Domain event behavior
-
-Example:
-
-```
-dotnet test
-```
-
----
 
 # Future Improvements
 
@@ -263,3 +248,8 @@ Possible production improvements:
 # Purpose
 
 This project is built as a **backend architecture showcase** demonstrating how to design scalable SaaS backend systems using modern .NET architecture patterns.
+
+# Author
+Hendi Dwi Purwanto
+
+Senior .NET Backend Engineer
